@@ -9,6 +9,7 @@ const { format } = require("date-fns");
 // 1st party dependencies
 var configData = require("./config/connection");
 var indexRouter = require("./routes/index");
+var exampleRouter = require("./routes/example_restful");
 
 async function getApp() {
 
@@ -34,6 +35,7 @@ async function getApp() {
   app.locals.format = format;
 
   app.use("/", indexRouter);
+  app.use("/", exampleRouter);
   app.use("/js", express.static(__dirname + "/node_modules/bootstrap/dist/js")); // redirect bootstrap JS
   app.use(
     "/css",
