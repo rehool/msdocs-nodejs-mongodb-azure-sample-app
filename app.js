@@ -4,12 +4,14 @@ var mongoose = require("mongoose");
 var path = require("path");
 var cookieParser = require("cookie-parser");
 var logger = require("morgan");
+var snowflake = require("snowflake-sdk");
 const { format } = require("date-fns");
 
 // 1st party dependencies
 var configData = require("./config/connection");
 var indexRouter = require("./routes/index");
 var exampleRouter = require("./routes/example_restful");
+var testSnowflake = require("./routes/test_snowflake.js");
 
 async function getApp() {
 
@@ -36,6 +38,7 @@ async function getApp() {
 
   app.use("/", indexRouter);
   app.use("/", exampleRouter);
+  app.use("/", testSnowflake);
   app.use("/js", express.static(__dirname + "/node_modules/bootstrap/dist/js")); // redirect bootstrap JS
   app.use(
     "/css",
