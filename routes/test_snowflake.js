@@ -1,6 +1,6 @@
 const express = require('express');
 const router = express.Router();
-const { getSnowflakeConnection } = require('../snowflake_connection');
+const { getSnowflakeConnection } = require('../config/snowflake_connection');
 
 // Simple test script to verify connection to Snowflake
 router.get('/top5rows', async function(req, res, next) {
