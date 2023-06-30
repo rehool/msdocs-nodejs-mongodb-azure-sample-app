@@ -4,7 +4,7 @@ const { getSecret } = require("./keyvault");
 
 async function putKeyVaultSecretInEnvVar() {
 
-    const secretName = process.env.KEY_VAULT_SECRET_NAME_DATABASE_URL;
+    const secretName = process.env.KEY_VAULT_SECRET_MONGO_CONNECTION_STRING;
     const keyVaultName = process.env.KEY_VAULT_NAME;
 
     console.log(secretName);

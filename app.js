@@ -8,19 +8,28 @@ var snowflake = require("snowflake-sdk");
 const { format } = require("date-fns");
 
 // 1st party dependencies
-var configData = require("./config/connection");
+var configMongoConn = require("./config/connection");
+var configSfConn = require("./config/snowflake_connection");
 var indexRouter = require("./routes/index");
 var exampleRouter = require("./routes/example_restful");
-var testSnowflake = require("./routes/test_snowflake.js");
+var testSnowflake = require("./routes/test_snowflake");
 
 async function getApp() {
 
-  // Database
-  var connectionInfo = await configData.getConnectionInfo();
+  // create the connection instance for mongo
+  console.log("Connecting to MongoDB...");
+  var connectionInfo = await configMongoConn.getConnectionInfo();
   mongoose.connect(connectionInfo.DATABASE_URL);
+  console.log("Connected to MongoDB.");
+
+  // create the connection pool instance for snowflake
+  //console.log("Connecting to Snowflake...");
+  //var connPool = await configSfConn.getSnowflakeConnection();
+  //console.log("Connected to Snowflake.");
 
   var app = express();
 
+  // set the port, use environment variable if available
   var port = normalizePort(process.env.PORT || '3000');
   app.set('port', port);
 
@@ -63,10 +72,7 @@ async function getApp() {
 
   return app;
 }
-/**
- * Normalize a port into a number, string, or false.
- */
-
+ // Normalize a port into a number, string, or false.
  function normalizePort(val) {
   var port = parseInt(val, 10);
 

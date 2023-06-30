@@ -10,11 +10,9 @@ async function getPrivateKeyFromKeyVault() {
   if (!secretName || !keyVaultName) throw Error('getSecret: Required params missing');
 
   // Fetch private key from Key Vault
-  const privateKeyBase64 = await getSecret(secretName, keyVaultName);
-
-  // Decode and return the private key
+  const privateKeyBase64 = await getSecret(secretName, keyVaultName)
   const privateKey = Buffer.from(privateKeyBase64, 'base64').toString('utf-8');
-  return privateKey;
+  return privateKey //.replace(/ /g, '\n');;
 }
 
 async function getSnowflakeConnection() {
@@ -34,7 +32,11 @@ async function getSnowflakeConnection() {
   }
 
   // Create the connection pool instance
+  console.log('\n\n\n')
+  console.log(process.env.SNOWFLAKE_PRIVATE_KEY)
+  console.log('\n\n\n')
   const sfConnectionPool = snowflake.createPool({
+    authenticator: 'SNOWFLAKE_JWT',
     account: process.env.SNOWFLAKE_ACCOUNT,
     username: process.env.SNOWFLAKE_USER,
     privateKey: process.env.SNOWFLAKE_PRIVATE_KEY,
@@ -48,17 +50,7 @@ async function getSnowflakeConnection() {
     min: 0
   });
 
-  return new Promise((resolve, reject) => {
-    sfConnectionPool.connect((error, conn) => {
-      if (error) {
-        console.error('Unable to connect: ' + error.message);
-        reject(error);
-      } else {
-        console.log('Successfully connected to Snowflake.');
-        resolve(sfConnectionPool);
-      }
-    });
-  });
+  return sfConnectionPool
 }
 
 module.exports = {
